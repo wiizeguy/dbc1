@@ -91,5 +91,34 @@ ALTER TABLE pracownik MODIFY COLUMN id_pracownika INT NOT NULL AUTO_INCREMENT PR
 ALTER TABLE zadanie ADD CONSTRAINT fk_pracownik FOREIGN KEY (pracownik) REFERENCES pracownik(id_pracownika) ON DELETE SET NULL; -- 1.4
 ALTER TABLE projekt ADD CONSTRAINT fk_menadzer_projektu FOREIGN KEY (menadzer_projektu) REFERENCES pracownik(id_pracownika); -- 1.4
 
+-- 2
+ALTER TABLE zadanie ADD COLUMN godziny_szacowane INTEGER DEFAULT 8; -- 2.1
 
+UPDATE zadanie SET godziny_szacowane = 4 WHERE id_zadania = 1; -- 2.211. Wyznaczy¢ zredukowane postacie schodkowe danych macierzy i ich rz¦dy:
+UPDATE zadanie SET godziny_szacowane = 12 WHERE id_zadania = 2; -- 2.2
+UPDATE zadanie SET godziny_szacowane = 16 WHERE id_zadania = 3; -- 2.2 
+
+ALTER TABLE zadanie MODIFY COLUMN godziny_szacowane INTEGER DEFAULT 6; -- 2.3
+
+INSERT INTO zadanie (nazwa_zadania, priorytet, opis, pracownik) VALUES ('temp_task', 'normalny', 'Opis...', 1); -- 2.4
+SELECT godziny_szacowane FROM zadanie WHERE nazwa_zadania = 'temp_task'; -- 2.4
+DELETE FROM zadanie WHERE nazwa_zadania = 'temp_task'; -- 2.4
+
+-- 3
+ALTER TABLE projekt ADD COLUMN opis_kratki VARCHAR(50) NULL; -- 3.1
+
+ALTER TABLE projekt MODIFY COLUMN opis_kratki VARCHAR(200) NULL; -- 3.2
+
+UPDATE projekt SET opis_kratki = 'MVP' WHERE id_projektu = 1; -- 3.3
+UPDATE projekt SET opis_kratki = 'pilne wdrożenie' WHERE id_projektu = 2; -- 3.3
+UPDATE projekt SET opis_kratki = 'MVP' WHERE id_projektu = 3; -- 3.3
+
+ALTER TABLE projekt DROP COLUMN opis_kratki; -- 3.4
+
+-- 4
+ALTER TABLE zadanie DROP FOREIGN KEY fk_projekt; -- 4.1
+
+ALTER TABLE zadanie ADD CONSTRAINT fk_projekt FOREIGN KEY (projekt) REFERENCES projekt(id_projektu) ON DELETE SET NULL; -- 4.2
+
+DELETE FROM projekt WHERE id_projektu = 1; -- 4.3
 
