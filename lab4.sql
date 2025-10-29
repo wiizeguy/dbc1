@@ -94,7 +94,7 @@ ALTER TABLE projekt ADD CONSTRAINT fk_menadzer_projektu FOREIGN KEY (menadzer_pr
 -- 2
 ALTER TABLE zadanie ADD COLUMN godziny_szacowane INTEGER DEFAULT 8; -- 2.1
 
-UPDATE zadanie SET godziny_szacowane = 4 WHERE id_zadania = 1; -- 2.211. Wyznaczy¢ zredukowane postacie schodkowe danych macierzy i ich rz¦dy:
+UPDATE zadanie SET godziny_szacowane = 4 WHERE id_zadania = 1; -- 2.2
 UPDATE zadanie SET godziny_szacowane = 12 WHERE id_zadania = 2; -- 2.2
 UPDATE zadanie SET godziny_szacowane = 16 WHERE id_zadania = 3; -- 2.2 
 
