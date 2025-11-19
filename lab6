@@ -1,0 +1,42 @@
+-- 1.1
+select avg(pensja) from EMPLOYEE;
+
+-- 1.2
+select avg(pensja), count(employee_name) from EMPLOYEE group by job_position_id;
+
+-- 1.3
+select (avg(year(now()) - year(BIRTH_DATE))), DEPARTMENT_ID as avg_age_in_years from EMPLOYEE GROUP BY department_id;
+
+-- 2.1
+select DEPARTMENT_ID, sum(pensja) from EMPLOYEE GROUP BY DEPARTMENT_ID ORDER BY sum(pensja) DESC;
+
+-- 2.2
+select JOB_POSITION_ID, avg(pensja) from EMPLOYEE group by job_position_id having count(job_position_id) >= 3 and avg(pensja) > 3000;
+
+-- 2.3
+select count(distinct pensja) AS n_distinct_payrolls, DEPARTMENT_ID from EMPLOYEE group by DEPARTMENT_ID having count(*) > 4 order by n_distinct_payrolls asc;
+
+-- 3.1
+create table DEPARTMENT select * from company_2025.DEPARTMENT;
+create table JOB_POSITION select * from company_2025.JOB_POSITION;
+
+-- 3.2
+select d.DEPARTMENT_NAME, count(e.EMPLOYEE_NAME) from DEPARTMENT d join EMPLOYEE e ON d.DEPARTMENT_ID=e.DEPARTMENT_ID GROUP BY d.DEPARTMENT_NAME;
+
+-- 3.3
+select d.DEPARTMENT_NAME, group_concat(concat(e.FIRST_NAME, ' ', e.LAST_NAME)) from DEPARTMENT d JOIN EMPLOYEE e ON d.DEPARTMENT_ID=e.DEPARTMENT_ID GROUP BY d.DEPARTMENT_NAME;
+
+-- 4.1
+select e.LAST_NAME, d.DEPARTMENT_NAME from EMPLOYEE e natural join DEPARTMENT d where year(BIRTH_DATE) between 1990 and 1999;
+
+-- 4.2
+select e.LAST_NAME, j.POSITION_NAME from EMPLOYEE e natural join JOB_POSITION j where j.POSITION_NAME LIKE '%magazyn%' order by e.BIRTH_DATE asc limit 5;
+
+-- 4.3
+select CONCAT(c1.SHORT_NAME, ' - ', c2.SHORT_NAME) from CLIENT c1 join CLIENT c2 on c1.CLIENT_ID+5=c2.CLIENT_ID;
+
+-- 5.1
+select j.POSITION_NAME, avg(e.pensja) from JOB_POSITION j join EMPLOYEE e on e.JOB_POSITION_ID=j.JOB_POSITION_ID join DEPARTMENT d on d.DEPARTMENT_ID=e.DEPARTMENT_ID where d.DEPARTMENT_NAME not in ('IT', 'HR') group by j.POSITION_NAME having count(e.EMPLOYEE_NAME) > 3;
+
+-- 5.2
+select j.POSITION_NAME, e.FIRST_NAME, e.LAST_NAME, e.BIRTH_DATE, d.DEPARTMENT_NAME from JOB_POSITION j join EMPLOYEE e on e.JOB_POSITION_ID = j.JOB_POSITION_ID join DEPARTMENT d on d.DEPARTMENT_ID = e.DEPARTMENT_ID where e.BIRTH_DATE = (select max(tmp_e.BIRTH_DATE) from EMPLOYEE tmp_e where tmp_e.JOB_POSITION_ID = e.JOB_POSITION_ID) or e.BIRTH_DATE = (select min(tmp_e.BIRTH_DATE) from EMPLOYEE tmp_e where tmp_e.JOB_POSITION_ID = e.JOB_POSITION_ID);
